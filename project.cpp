@@ -1,5 +1,9 @@
 #include <iostream>
 using namespace std;
+#define X_SIZE_OF_LED 16
+#define Y_SIZE_OF_LED 16
+#define X_CENTER 8
+#define Y_CENTER 8
 
 class Rectangle{
     protected:
@@ -10,38 +14,42 @@ class Rectangle{
             y = j;
         }
         
-}
+};
 
 class Ball : public Rectangle{
     private :
         int moving_direction;//0 means stable, 1 means right up, 2 means right down, 3 means left down, 4 means left up
 
         bool go_up(){
-            if(y > 0):
+            if(y > 0){
                 y -= 1;
                 return true;
+            }
             return false;
         }
         bool go_down(){
-            if(y + 1 < Y_SIZE_OF_LED):
+            if(y + 1 < Y_SIZE_OF_LED){
                 y += 1;
                 return true;
+            }
             return false;
         }
         bool go_left(){
-            if(x > 0):
+            if(x > 0){
                 x -= 1;
                 return true;
+            }
             return false;
         }
         bool go_right(){
-            if(x + 1 < X_SIZE_OF_LED):
+            if(x + 1 < X_SIZE_OF_LED){
                 x += 1;
                 return true;
+            }
             return false;
         }
     public :
-        Ball(){
+        Ball(): Rectangle(X_CENTER, Y_CENTER){
             ballInit();
         }
         void ballInit(){
@@ -103,13 +111,13 @@ class Ball : public Rectangle{
                     return false;
             }
         }
-}
+};
 
 class Controller : public Rectangle{
         private:
             int left0Right1;
     public:
-        Controller(int i){
+        Controller(int i) : Rectangle(X_CENTER, Y_CENTER){
             // 0 for left controller, 1 for right controller
             left0Right1 = i;
             controllerInit();
@@ -127,15 +135,17 @@ class Controller : public Rectangle{
         }
 
         bool go_up(){
-            if(y > 0):
+            if(y > 0){
                 y -= 1;
                 return true;
+            }
             return false;
         }
         bool go_down(){
-            if(y + 3 < Y_SIZE_OF_LED):
+            if(y + 3 < Y_SIZE_OF_LED){
                 y += 1;
                 return true;
+            }
             return false;
         }
     public :
@@ -148,7 +158,7 @@ class Controller : public Rectangle{
                     go_down();
             }
         }
-}
+};
 
 
 int main() {
