@@ -21,6 +21,8 @@
 //BUTTONS
 #define B1 2
 #define B2 3
+#define B3 1
+#define B4 0
 
 //for controlling interrupts
 int upButton = 0;
@@ -28,6 +30,7 @@ int downButton = 0;
 
 Ball ball = Ball();
 int time = 0;
+int state1 = 0, state2=0;
 
 
 void setup() {
@@ -68,8 +71,10 @@ void setup() {
 
   pinMode(B1, INPUT_PULLUP);
   pinMode(B2, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(B1), up, FALLING);
-  attachInterrupt(digitalPinToInterrupt(B2), down, FALLING);
+  attachInterrupt(digitalPinToInterrupt(B1), up_right, RISING);
+  attachInterrupt(digitalPinToInterrupt(B2), down_right, RISING);
+  pinMode(B3, INPUT_PULLUP);
+  pinMode(B4, INPUT_PULLUP);
 
   for(int i = 0; i < X_SIZE_OF_LED; i++){
     for(int j = 0; j < Y_SIZE_OF_LED; j++){
@@ -114,25 +119,43 @@ void updateLED(){
 }
 
 //for interrupt of up button
-void up(){
+void up_right(){
   right.go_up();
 }
 
 //for interrupt of down button
-void down(){
+void down_right(){
   right.go_down();
+}
+
+void checkLeftController(){
+  if(digitalRead(B3) == HIGH){
+    if(state1 == 0){
+      state1 = 1;
+      left.go_up();
+    }
+  }
+  else{
+    if(state1 == 1){
+      state1 = 0;
+    }        
+  }
+  if(digitalRead(B4) == HIGH){
+    if(state2 == 0){
+      state2 = 1;
+      left.go_down();
+    }
+  }
+  else{
+    if(state2 == 1){
+      state2 = 0;
+    }        
+  }
 }
 
 
 void loop() {
-  if(upButton==1){
-    //up button action
-    upButton = 0;    
-  }
-  if(downButton==1){
-    //down button action
-    downButton = 0;    
-  }
+  checkLeftController();
   if(time%70 == 0)
     ball.move();
   updateLED();
