@@ -1,3 +1,5 @@
+#include"project.h"
+
 //ROWS
 #define R1 4
 #define R2 5
@@ -24,6 +26,10 @@
 int upButton = 0;
 int downButton = 0;
 
+Ball ball = Ball();
+int time = 0;
+
+
 void setup() {
   pinMode(R1, OUTPUT);
   pinMode(R2, OUTPUT);
@@ -43,59 +49,78 @@ void setup() {
   pinMode(C7, OUTPUT);
   pinMode(C8, OUTPUT);
 
-  digitalWrite(R1,HIGH);
-  digitalWrite(R2,HIGH);
-  digitalWrite(R3,HIGH);
-  digitalWrite(R4,HIGH);
-  digitalWrite(R5,HIGH);
-  digitalWrite(R6,HIGH);
-  digitalWrite(R7,HIGH);
-  digitalWrite(R8,HIGH);
-  digitalWrite(C1,LOW);
-  digitalWrite(C2,LOW);
-  digitalWrite(C3,LOW);
-  digitalWrite(C4,LOW);
-  digitalWrite(C5,LOW);
-  digitalWrite(C6,LOW);
-  digitalWrite(C7,LOW);
-  digitalWrite(C8,LOW);
+  digitalWrite(R1,LOW);
+  digitalWrite(R2,LOW);
+  digitalWrite(R3,LOW);
+  digitalWrite(R4,LOW);
+  digitalWrite(R5,LOW);
+  digitalWrite(R6,LOW);
+  digitalWrite(R7,LOW);
+  digitalWrite(R8,LOW);
+  digitalWrite(C1,HIGH);
+  digitalWrite(C2,HIGH);
+  digitalWrite(C3,HIGH);
+  digitalWrite(C4,HIGH);
+  digitalWrite(C5,HIGH);
+  digitalWrite(C6,HIGH);
+  digitalWrite(C7,HIGH);
+  digitalWrite(C8,HIGH);
 
   pinMode(B1, INPUT_PULLUP);
   pinMode(B2, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(B1), up, FALLING);
-  attachInterrupt(digitalPinToInterrupt(B2), down, FALLING);  
+  attachInterrupt(digitalPinToInterrupt(B2), down, FALLING);
+
+  for(int i = 0; i < X_SIZE_OF_LED; i++){
+    for(int j = 0; j < Y_SIZE_OF_LED; j++){
+        array[i][j] = 0;
+    }
+  }
+  ball.ballInit();
+  left.controllerInit();
+  right.controllerInit();
 }
 
 void setRow(int row){
-  if(row==1) digitalWrite(R1,LOW); else digitalWrite(R1,HIGH);
-  if(row==2) digitalWrite(R2,LOW); else digitalWrite(R2,HIGH);
-  if(row==3) digitalWrite(R3,LOW); else digitalWrite(R3,HIGH);
-  if(row==4) digitalWrite(R4,LOW); else digitalWrite(R4,HIGH);
-  if(row==5) digitalWrite(R5,LOW); else digitalWrite(R5,HIGH);
-  if(row==6) digitalWrite(R6,LOW); else digitalWrite(R6,HIGH);
-  if(row==7) digitalWrite(R7,LOW); else digitalWrite(R7,HIGH);
-  if(row==8) digitalWrite(R8,LOW); else digitalWrite(R8,HIGH);
+  if(row==1) digitalWrite(R1,HIGH); else digitalWrite(R1,LOW);
+  if(row==2) digitalWrite(R2,HIGH); else digitalWrite(R2,LOW);
+  if(row==3) digitalWrite(R3,HIGH); else digitalWrite(R3,LOW);
+  if(row==4) digitalWrite(R4,HIGH); else digitalWrite(R4,LOW);
+  if(row==5) digitalWrite(R5,HIGH); else digitalWrite(R5,LOW);
+  if(row==6) digitalWrite(R6,HIGH); else digitalWrite(R6,LOW);
+  if(row==7) digitalWrite(R7,HIGH); else digitalWrite(R7,LOW);
+  if(row==8) digitalWrite(R8,HIGH); else digitalWrite(R8,LOW);
 }
 
-void setColumn(int col){
-  if(col==1) digitalWrite(C1,HIGH); else digitalWrite(C1,LOW);
-  if(col==2) digitalWrite(C2,HIGH); else digitalWrite(C2,LOW);
-  if(col==3) digitalWrite(C3,HIGH); else digitalWrite(C3,LOW);
-  if(col==4) digitalWrite(C4,HIGH); else digitalWrite(C4,LOW);
-  if(col==5) digitalWrite(C5,HIGH); else digitalWrite(C5,LOW);
-  if(col==6) digitalWrite(C6,HIGH); else digitalWrite(C6,LOW);
-  if(col==7) digitalWrite(C7,HIGH); else digitalWrite(C7,LOW);
-  if(col==8) digitalWrite(C8,HIGH); else digitalWrite(C8,LOW);
+void setLEDInActiveRow(int col, int state){
+  if(col==1) digitalWrite(C1,1 - state);
+  if(col==2) digitalWrite(C2,1 - state);
+  if(col==3) digitalWrite(C3,1 - state);
+  if(col==4) digitalWrite(C4,1 - state);
+  if(col==5) digitalWrite(C5,1 - state);
+  if(col==6) digitalWrite(C6,1 - state);
+  if(col==7) digitalWrite(C7,1 - state);
+  if(col==8) digitalWrite(C8,1 - state);
+}
+
+void updateLED(){
+  for(int i = 0; i < Y_SIZE_OF_LED; i++){
+    setRow(i + 1);
+    for(int j = 0; j < X_SIZE_OF_LED; j++){ 
+      setLEDInActiveRow(j + 1, array[j][i]);
+    }
+    delay(1);    
+  }
 }
 
 //for interrupt of up button
 void up(){
-  upButton = 1;
+  right.go_up();
 }
 
 //for interrupt of down button
 void down(){
-  downButton = 1;
+  right.go_down();
 }
 
 
@@ -108,4 +133,8 @@ void loop() {
     //down button action
     downButton = 0;    
   }
+  if(time%70 == 0)
+    ball.move();
+  updateLED();
+  time++;
 }
