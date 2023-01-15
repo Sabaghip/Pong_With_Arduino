@@ -41,9 +41,7 @@ class Controller : public Rectangle{
                 y = Y_CENTER - 1;
                 x = X_SIZE_OF_LED - 1;
             }
-            array[x][y] = 1;
-            array[x][y+1] = 1;
-            array[x][y+2] = 1;
+            updateArray();
         }
 
         Controller(int i) : Rectangle(X_CENTER, Y_CENTER){
@@ -52,7 +50,11 @@ class Controller : public Rectangle{
             controllerInit();
         }
 
-        
+        void updateArray(){
+            array[x][y] = 1;
+            array[x][y+1] = 1;
+            array[x][y+2] = 1;
+        }
 
         bool go_up(){
             if(y > 0){
@@ -85,6 +87,8 @@ class Ball : public Rectangle{
         bool go_up(){
             if(y > 0){
                 array[x][y] = 0;
+                right.updateArray();
+                left.updateArray();
                 y -= 1;
                 array[x][y] = 1;
                 return true;
@@ -94,6 +98,8 @@ class Ball : public Rectangle{
         bool go_down(){
             if(y + 1 < Y_SIZE_OF_LED){
                 array[x][y] = 0;
+                right.updateArray();
+                left.updateArray();
                 y += 1;
                 array[x][y] = 1;
                 return true;
@@ -103,6 +109,7 @@ class Ball : public Rectangle{
         bool go_left(){
             if(x > 0){
                 array[x][y] = 0;
+                left.updateArray();
                 x -= 1;
                 array[x][y] = 1;
                 return true;
@@ -112,10 +119,80 @@ class Ball : public Rectangle{
         bool go_right(){
             if(x + 1 < X_SIZE_OF_LED){
                 array[x][y] = 0;
+                right.updateArray();
                 x += 1;
                 array[x][y] = 1;
                 return true;
             }
+            return false;
+        }
+        bool move1(){
+            if(x == (X_SIZE_OF_LED - 2) && y >= (right.getY() + 1) && y <= (right.getY() + 3)){
+                 moving_direction = 4;
+                 move4();
+            }
+            else{
+                if(!go_right()){
+                    ballInit();
+                    return true;
+                }
+                if(!go_up()){
+                    moving_direction = 2;
+                    go_down();
+                }
+            }
+            return false;
+        }
+        
+        bool move2(){
+            if(x == (X_SIZE_OF_LED - 2) && y >= (right.getY() - 1) && y<= (right.getY() + 1)){
+                moving_direction = 3;
+                move3();
+            }
+            else{
+                if(!go_right()){
+                    ballInit();
+                    return true;
+                }
+                if(!go_down()){
+                    moving_direction = 1;
+                    go_up();
+                }
+            }
+            return false;
+        }
+        bool move3(){
+            if(x == 1 && y >= (left.getY() - 1) && y <= (left.getY() + 1)){
+                moving_direction = 2;
+                move2();
+            }
+            else{
+                if(!go_left()){
+                    ballInit();
+                    return true;
+                }
+                if(!go_down()){
+                    moving_direction = 4;
+                    go_up();
+                }
+            }
+            return false;
+        }
+        bool move4(){
+            if(x == 1 && y >= (left.getY() + 1) && y<= (left.getY() + 3)){
+                moving_direction = 1;
+                move1();
+            }
+            else{
+                if(!go_left()){
+                    ballInit();
+                    return true;
+                }
+                if(!go_up()){
+                    moving_direction = 3;
+                    go_down();
+                }
+            }   
             return false;
         }
 
@@ -134,65 +211,13 @@ class Ball : public Rectangle{
         bool move(){
             switch(moving_direction){
                 case 1:
-                    if(x == (X_SIZE_OF_LED - 2) && y >= (right.getY() + 1) && y <= (right.getY() + 3)){
-                        moving_direction = 4;
-                    }
-                    else{
-                        if(!go_right()){
-                            ballInit();
-                            return true;
-                        }
-                        if(!go_up()){
-                            moving_direction = 2;
-                            go_down();
-                        }
-                    }
-                    return false;
+                    return move1();
                 case 2:
-                    if(x == (X_SIZE_OF_LED - 2) && y >= (right.getY() - 1) && y<= (right.getY() + 1)){
-                        moving_direction = 3;
-                    }
-                    else{
-                        if(!go_right()){
-                            ballInit();
-                            return true;
-                        }
-                        if(!go_down()){
-                            moving_direction = 1;
-                            go_up();
-                        }
-                    }
-                    return false;
+                    return move2();
                 case 3:
-                    if(x == 1 && y >= (left.getY() - 1) && y <= (left.getY() + 1)){
-                        moving_direction = 2;
-                    }
-                    else{
-                        if(!go_left()){
-                            ballInit();
-                            return true;
-                        }
-                        if(!go_down()){
-                            moving_direction = 4;
-                            go_up();
-                        }
-                    }
-                    return false;
+                    return move3();
                 case 4:
-                    if(x == 1 && y >= (left.getY() + 1) && y<= (left.getY() + 3)){
-                        moving_direction = 1;
-                    }
-                    else{
-                        if(!go_left()){
-                            ballInit();
-                            return true;
-                        }
-                        if(!go_up()){
-                            moving_direction = 3;
-                            go_down();
-                        }
-                    }   
-                    return false;
+                    return move4();
                 default:
                     return false;
             }
