@@ -8,6 +8,8 @@ using namespace std;
 //for pitch
 int array[X_SIZE_OF_LED][Y_SIZE_OF_LED];
 
+int newGame = 1;
+
 
 class Rectangle{
     protected:
@@ -207,6 +209,7 @@ class Ball : public Rectangle{
             y = Y_CENTER;
             array[x][y] = 1;
             moving_direction = 1;
+            newGame = 1;
         }
         bool move(){
             switch(moving_direction){
@@ -222,6 +225,61 @@ class Ball : public Rectangle{
                     return false;
             }
         }
+        void make3(){
+            array[2][2] = 1;
+            array[3][2] = 1;
+            array[3][3] = 1;
+            array[3][4] = 1;
+            array[3][5] = 1;
+            array[3][6] = 1;
+            array[2][4] = 1;
+            array[2][6] = 1;
+        }
+        void remove3(){
+            array[2][2] = 0;
+            array[3][2] = 0;
+            array[3][3] = 0;
+            array[3][4] = 0;
+            array[3][5] = 0;
+            array[3][6] = 0;
+            array[2][4] = 0;
+            array[2][6] = 0;
+        }
+        void make2(){
+            array[2][2] = 1;
+            array[3][2] = 1;
+            array[3][3] = 1;
+            array[3][4] = 1;
+            array[3][6] = 1;
+            array[2][4] = 1;
+            array[2][5] = 1;
+            array[2][6] = 1;
+        }
+        void remove2(){
+            array[2][2] = 0;
+            array[3][2] = 0;
+            array[3][3] = 0;
+            array[3][4] = 0;
+            array[3][6] = 0;
+            array[2][4] = 0;
+            array[2][5] = 0;
+            array[2][6] = 0;
+        }
+        void make1(){
+            array[2][2] = 1;
+            array[2][3] = 1;
+            array[2][4] = 1;
+            array[2][5] = 1;
+            array[2][6] = 1;
+        }
+        void remove1(){
+            array[2][2] = 0;
+            array[2][3] = 0;
+            array[2][4] = 0;
+            array[2][5] = 0;
+            array[2][6] = 0;
+        }
+
 };
 
 

@@ -1,6 +1,6 @@
 #include"project.h"
 
-//ROWS
+//COLUMNS
 #define C1 4
 #define C2 5
 #define C3 6
@@ -9,7 +9,7 @@
 #define C6 9
 #define C7 10
 #define C8 11
-//COLUMNS
+//ROWS
 #define R1 12
 #define R2 13
 #define R3 A0
@@ -86,6 +86,25 @@ void setup() {
   right.controllerInit();
 }
 
+void new_game(){
+  ball.make3();
+  for(int i = 0; i < 100; i++){
+    updateLED();
+  }
+  ball.remove3();
+  ball.make2();
+  for(int i = 0; i < 100; i++){
+    updateLED();
+  }
+  ball.remove2();
+  ball.make1();
+  for(int i = 0; i < 100; i++){
+    updateLED();
+  }
+  ball.remove1();
+  newGame = 0;  
+}
+
 void setRow(int row){
   if(row==1) digitalWrite(R1,LOW); else digitalWrite(R1,HIGH);
   if(row==2) digitalWrite(R2,LOW); else digitalWrite(R2,HIGH);
@@ -155,6 +174,7 @@ void checkLeftController(){
 
 
 void loop() {
+  if(newGame) new_game();
   checkLeftController();
   if(time%45 == 0)
     ball.move();
