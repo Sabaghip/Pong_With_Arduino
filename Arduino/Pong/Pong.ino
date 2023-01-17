@@ -88,17 +88,17 @@ void setup() {
 
 void new_game(){
   ball.make3();
-  for(int i = 0; i < 100; i++){
+  for(int i = 0; i < 70; i++){
     updateLED();
   }
   ball.remove3();
   ball.make2();
-  for(int i = 0; i < 100; i++){
+  for(int i = 0; i < 70; i++){
     updateLED();
   }
   ball.remove2();
   ball.make1();
-  for(int i = 0; i < 100; i++){
+  for(int i = 0; i < 70; i++){
     updateLED();
   }
   ball.remove1();

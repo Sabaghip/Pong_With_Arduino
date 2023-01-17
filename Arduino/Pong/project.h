@@ -129,7 +129,7 @@ class Ball : public Rectangle{
             return false;
         }
         bool move1(){
-            if(x == (X_SIZE_OF_LED - 2) && y >= (right.getY() + 1) && y <= (right.getY() + 3)){
+            if(x == (X_SIZE_OF_LED - 2) && y >= (right.getY()) && y <= (right.getY() + 3)){
                  moving_direction = 4;
                  move4();
             }
@@ -147,7 +147,7 @@ class Ball : public Rectangle{
         }
         
         bool move2(){
-            if(x == (X_SIZE_OF_LED - 2) && y >= (right.getY() - 1) && y<= (right.getY() + 1)){
+            if(x == (X_SIZE_OF_LED - 2) && y >= (right.getY() - 1) && y<= (right.getY() + 2)){
                 moving_direction = 3;
                 move3();
             }
@@ -164,7 +164,7 @@ class Ball : public Rectangle{
             return false;
         }
         bool move3(){
-            if(x == 1 && y >= (left.getY() - 1) && y <= (left.getY() + 1)){
+            if(x == 1 && y >= (left.getY() - 1) && y <= (left.getY() + 2)){
                 moving_direction = 2;
                 move2();
             }
@@ -181,7 +181,7 @@ class Ball : public Rectangle{
             return false;
         }
         bool move4(){
-            if(x == 1 && y >= (left.getY() + 1) && y<= (left.getY() + 3)){
+            if(x == 1 && y >= (left.getY()) && y<= (left.getY() + 3)){
                 moving_direction = 1;
                 move1();
             }
