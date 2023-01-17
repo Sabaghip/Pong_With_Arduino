@@ -1,4 +1,8 @@
 using namespace std;
+
+#include <time.h>
+#include<stdlib.h>
+
 #define X_SIZE_OF_LED 8
 #define Y_SIZE_OF_LED 8
 #define X_CENTER 4
@@ -9,7 +13,6 @@ using namespace std;
 int array[X_SIZE_OF_LED][Y_SIZE_OF_LED];
 
 int newGame = 1;
-
 
 class Rectangle{
     protected:
@@ -201,6 +204,7 @@ class Ball : public Rectangle{
 
     public :
         Ball() : Rectangle(X_CENTER, Y_CENTER){
+            srand(time(NULL));
             ballInit();
         }
         void ballInit(){
@@ -208,7 +212,7 @@ class Ball : public Rectangle{
             x = X_CENTER;
             y = Y_CENTER;
             array[x][y] = 1;
-            moving_direction = 1;
+            moving_direction = rand() % 4 + 1;
             newGame = 1;
         }
         bool move(){

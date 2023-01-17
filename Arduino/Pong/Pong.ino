@@ -29,7 +29,7 @@ int upButton = 0;
 int downButton = 0;
 
 Ball ball = Ball();
-int time = 1;
+int timer = 1;
 int state1 = 0, state2=0;
 
 
@@ -176,8 +176,8 @@ void checkLeftController(){
 void loop() {
   if(newGame) new_game();
   checkLeftController();
-  if(time%45 == 0)
+  if(timer%45 == 0)
     ball.move();
   updateLED();
-  time++;
+  timer++;
 }
